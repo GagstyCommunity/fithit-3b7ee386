@@ -17,6 +17,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
  
  // Lazy load dashboard pages
  const UserDashboard = lazy(() => import("./pages/dashboard/UserDashboard"));
+ const ProfileSettings = lazy(() => import("./pages/dashboard/ProfileSettings"));
+ const Goals = lazy(() => import("./pages/dashboard/Goals"));
+ const Progress = lazy(() => import("./pages/dashboard/Progress"));
+ const Activity = lazy(() => import("./pages/dashboard/Activity"));
  const TrainerDashboard = lazy(() => import("./pages/trainer/TrainerDashboard"));
  const GymDashboard = lazy(() => import("./pages/gym/GymDashboard"));
  const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
@@ -56,6 +60,50 @@ const App = () => (
               </ProtectedRoute>
             }
           />
+ 
+           <Route
+             path="/dashboard/profile"
+             element={
+               <ProtectedRoute>
+                 <Suspense fallback={<PageLoader />}>
+                   <ProfileSettings />
+                 </Suspense>
+               </ProtectedRoute>
+             }
+           />
+ 
+           <Route
+             path="/dashboard/goals"
+             element={
+               <ProtectedRoute>
+                 <Suspense fallback={<PageLoader />}>
+                   <Goals />
+                 </Suspense>
+               </ProtectedRoute>
+             }
+           />
+ 
+           <Route
+             path="/dashboard/progress"
+             element={
+               <ProtectedRoute>
+                 <Suspense fallback={<PageLoader />}>
+                   <Progress />
+                 </Suspense>
+               </ProtectedRoute>
+             }
+           />
+ 
+           <Route
+             path="/dashboard/activity"
+             element={
+               <ProtectedRoute>
+                 <Suspense fallback={<PageLoader />}>
+                   <Activity />
+                 </Suspense>
+               </ProtectedRoute>
+             }
+           />
  
            {/* Trainer Routes */}
            <Route
