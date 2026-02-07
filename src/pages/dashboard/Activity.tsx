@@ -1,21 +1,21 @@
- import { DashboardLayout } from "@/components/layout/DashboardLayout";
- import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
- import { Badge } from "@/components/ui/badge";
- import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
- import { ScrollArea } from "@/components/ui/scroll-area";
- import { 
-   Activity as ActivityIcon,
-   Dumbbell,
-   Eye,
-   Edit,
-   MessageSquare,
-   Clock,
-   User,
-   Shield,
-   CheckCircle,
-   XCircle,
-   Calendar
- } from "lucide-react";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { FitnessTimeline } from "@/components/timeline/FitnessTimeline";
+import { 
+  Dumbbell,
+  Eye,
+  Edit,
+  MessageSquare,
+  Clock,
+  User,
+  Shield,
+  CheckCircle,
+  XCircle,
+  Calendar
+} from "lucide-react";
  
  // Mock workout history data
  const mockWorkoutHistory = [
@@ -101,13 +101,6 @@
    },
  ];
  
- // Mock timeline events
- const mockTimeline = [
-   { id: "1", type: "achievement", title: "Week Warrior", description: "Achieved 7-day streak", date: "2026-02-01" },
-   { id: "2", type: "trainer_change", title: "Trainer Assigned", description: "Mike Johnson became your trainer", date: "2026-01-15" },
-   { id: "3", type: "gym_joined", title: "Joined FitZone Gym", description: "Started your fitness journey", date: "2026-01-10" },
-   { id: "4", type: "goal_set", title: "Goal Created", description: "Set weight loss goal: 75kg", date: "2026-01-10" },
- ];
  
  const getAccessIcon = (type: string) => {
    switch (type) {
@@ -118,14 +111,14 @@
    }
  };
  
- const getAccessColor = (type: string) => {
-   switch (type) {
-     case "view": return "bg-blue-500/10 text-blue-500";
-     case "edit": return "bg-orange-500/10 text-orange-500";
-     case "comment": return "bg-green-500/10 text-green-500";
-     default: return "bg-muted text-muted-foreground";
-   }
- };
+const getAccessColor = (type: string) => {
+  switch (type) {
+    case "view": return "bg-info/10 text-info";
+    case "edit": return "bg-warning/10 text-warning";
+    case "comment": return "bg-success/10 text-success";
+    default: return "bg-muted text-muted-foreground";
+  }
+};
  
  export default function Activity() {
    return (
@@ -164,14 +157,14 @@
                        className="flex items-center justify-between p-4 rounded-lg border bg-card"
                      >
                        <div className="flex items-center gap-4">
-                         <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                           workout.completed ? "bg-green-500/10" : "bg-red-500/10"
-                         }`}>
-                           {workout.completed ? (
-                             <CheckCircle className="h-5 w-5 text-green-500" />
-                           ) : (
-                             <XCircle className="h-5 w-5 text-red-500" />
-                           )}
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                            workout.completed ? "bg-success/10" : "bg-destructive/10"
+                          }`}>
+                            {workout.completed ? (
+                              <CheckCircle className="h-5 w-5 text-success" />
+                            ) : (
+                              <XCircle className="h-5 w-5 text-destructive" />
+                            )}
                          </div>
                          <div>
                            <p className="font-medium">{workout.name}</p>
@@ -260,42 +253,9 @@
            </Card>
          </TabsContent>
  
-         <TabsContent value="timeline" className="space-y-4">
-           <Card>
-             <CardHeader>
-               <CardTitle className="flex items-center gap-2">
-                 <ActivityIcon className="h-5 w-5 text-primary" />
-                 Fitness Timeline
-               </CardTitle>
-               <CardDescription>
-                 Your complete fitness journey history
-               </CardDescription>
-             </CardHeader>
-             <CardContent>
-               <div className="relative">
-                 <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-border" />
-                 <div className="space-y-6 ml-4">
-                   {mockTimeline.map((event, index) => (
-                     <div key={event.id} className="relative pl-8">
-                       <div className="absolute left-0 top-1 w-3 h-3 rounded-full bg-primary border-2 border-background" />
-                       <div className="p-4 rounded-lg border bg-card">
-                         <div className="flex items-center justify-between mb-1">
-                           <h4 className="font-medium">{event.title}</h4>
-                           <span className="text-sm text-muted-foreground">
-                             {new Date(event.date).toLocaleDateString()}
-                           </span>
-                         </div>
-                         <p className="text-sm text-muted-foreground">
-                           {event.description}
-                         </p>
-                       </div>
-                     </div>
-                   ))}
-                 </div>
-               </div>
-             </CardContent>
-           </Card>
-         </TabsContent>
+          <TabsContent value="timeline" className="space-y-4">
+            <FitnessTimeline />
+          </TabsContent>
        </Tabs>
      </DashboardLayout>
    );

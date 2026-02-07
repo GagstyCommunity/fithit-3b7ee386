@@ -15,15 +15,17 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
  import ResetPassword from "./pages/ResetPassword";
  import NotFound from "./pages/NotFound";
  
- // Lazy load dashboard pages
- const UserDashboard = lazy(() => import("./pages/dashboard/UserDashboard"));
- const ProfileSettings = lazy(() => import("./pages/dashboard/ProfileSettings"));
- const Goals = lazy(() => import("./pages/dashboard/Goals"));
- const Progress = lazy(() => import("./pages/dashboard/Progress"));
- const Activity = lazy(() => import("./pages/dashboard/Activity"));
- const TrainerDashboard = lazy(() => import("./pages/trainer/TrainerDashboard"));
- const GymDashboard = lazy(() => import("./pages/gym/GymDashboard"));
- const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+// Lazy load dashboard pages
+const UserDashboard = lazy(() => import("./pages/dashboard/UserDashboard"));
+const ProfileSettings = lazy(() => import("./pages/dashboard/ProfileSettings"));
+const Goals = lazy(() => import("./pages/dashboard/Goals"));
+const Progress = lazy(() => import("./pages/dashboard/Progress"));
+const Activity = lazy(() => import("./pages/dashboard/Activity"));
+const Onboarding = lazy(() => import("./pages/Onboarding"));
+const TrainerDashboard = lazy(() => import("./pages/trainer/TrainerDashboard"));
+const TrainerPrograms = lazy(() => import("./pages/trainer/TrainerPrograms"));
+const GymDashboard = lazy(() => import("./pages/gym/GymDashboard"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
  
  function PageLoader() {
    return (
@@ -105,17 +107,40 @@ const App = () => (
              }
            />
  
-           {/* Trainer Routes */}
-           <Route
-             path="/trainer"
-             element={
-               <ProtectedRoute requiredRoles={["trainer"]}>
-                 <Suspense fallback={<PageLoader />}>
-                   <TrainerDashboard />
-                 </Suspense>
-               </ProtectedRoute>
-             }
-           />
+         {/* Onboarding Route */}
+         <Route
+           path="/onboarding"
+           element={
+             <ProtectedRoute>
+               <Suspense fallback={<PageLoader />}>
+                 <Onboarding />
+               </Suspense>
+             </ProtectedRoute>
+           }
+         />
+
+         {/* Trainer Routes */}
+         <Route
+           path="/trainer"
+           element={
+             <ProtectedRoute requiredRoles={["trainer"]}>
+               <Suspense fallback={<PageLoader />}>
+                 <TrainerDashboard />
+               </Suspense>
+             </ProtectedRoute>
+           }
+         />
+         
+         <Route
+           path="/trainer/programs"
+           element={
+             <ProtectedRoute requiredRoles={["trainer"]}>
+               <Suspense fallback={<PageLoader />}>
+                 <TrainerPrograms />
+               </Suspense>
+             </ProtectedRoute>
+           }
+         />
  
            {/* Gym Admin Routes */}
            <Route

@@ -46,11 +46,11 @@
    { label: "Profile", href: "/dashboard/profile", icon: UserIcon },
  ];
  
- const trainerNavItems: NavItem[] = [
-   { label: "Trainer Dashboard", href: "/trainer", icon: ClipboardList, roles: ["trainer"] },
-   { label: "My Clients", href: "/trainer/clients", icon: Users, roles: ["trainer"] },
-   { label: "Programs", href: "/trainer/programs", icon: Calendar, roles: ["trainer"] },
- ];
+const trainerNavItems: NavItem[] = [
+  { label: "Trainer Dashboard", href: "/trainer", icon: ClipboardList, roles: ["trainer"] },
+  { label: "My Clients", href: "/trainer/clients", icon: Users, roles: ["trainer"] },
+  { label: "Create Program", href: "/trainer/programs", icon: Calendar, roles: ["trainer"] },
+];
  
  const gymNavItems: NavItem[] = [
    { label: "Gym Dashboard", href: "/gym", icon: Building2, roles: ["gym_admin"] },
