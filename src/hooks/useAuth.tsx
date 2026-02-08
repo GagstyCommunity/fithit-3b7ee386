@@ -114,12 +114,22 @@ export function useAuth() {
       return { error };
     }
 
+    // Check if user is auto-confirmed (session exists immediately)
+    if (data.session) {
+      toast({
+        title: "Account created!",
+        description: "Welcome to Fitness OS. Let's set up your profile.",
+      });
+      navigate("/onboarding");
+      return { data, autoConfirmed: true };
+    }
+
     toast({
       title: "Check your email",
       description: "We sent you a confirmation link to verify your account.",
     });
 
-    return { data };
+    return { data, autoConfirmed: false };
   };
 
   const signIn = async (email: string, password: string) => {

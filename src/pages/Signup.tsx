@@ -61,9 +61,11 @@ export default function Signup() {
     const result = await signUp(values.email, values.password, values.fullName);
     setIsLoading(false);
     
-    if (!result.error) {
+    // Only show success screen if not auto-confirmed (needs email verification)
+    if (!result.error && !result.autoConfirmed) {
       setIsSuccess(true);
     }
+    // If auto-confirmed, navigation is handled by signUp function
   };
 
   if (isSuccess) {
