@@ -24,6 +24,7 @@ const Activity = lazy(() => import("./pages/dashboard/Activity"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
 const TrainerDashboard = lazy(() => import("./pages/trainer/TrainerDashboard"));
 const TrainerPrograms = lazy(() => import("./pages/trainer/TrainerPrograms"));
+const TrainerClients = lazy(() => import("./pages/trainer/TrainerClients"));
 const GymDashboard = lazy(() => import("./pages/gym/GymDashboard"));
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
  
@@ -131,18 +132,29 @@ const App = () => (
            }
          />
          
-         <Route
-           path="/trainer/programs"
-           element={
-             <ProtectedRoute requiredRoles={["trainer"]}>
-               <Suspense fallback={<PageLoader />}>
-                 <TrainerPrograms />
-               </Suspense>
-             </ProtectedRoute>
-           }
-         />
+          <Route
+            path="/trainer/programs"
+            element={
+              <ProtectedRoute requiredRoles={["trainer"]}>
+                <Suspense fallback={<PageLoader />}>
+                  <TrainerPrograms />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+          
+          <Route
+            path="/trainer/clients"
+            element={
+              <ProtectedRoute requiredRoles={["trainer"]}>
+                <Suspense fallback={<PageLoader />}>
+                  <TrainerClients />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
  
-           {/* Gym Admin Routes */}
+            {/* Gym Admin Routes */}
            <Route
              path="/gym"
              element={
