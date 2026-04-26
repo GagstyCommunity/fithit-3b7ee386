@@ -152,6 +152,19 @@ export function useAuth() {
       description: "You've successfully signed in.",
     });
 
+    // Apply any pending role (set by trainer/gym signup that needed email confirmation)
+    const pendingRole = localStorage.getItem("pending_role") as AppRole | null;
+    const pendingRedirect = localStorage.getItem("pending_role_redirect");
+    if (pendingRole === "trainer" || pendingRole === "gym_admin") {
+      const { error: roleErr } = await supabase.rpc("self_assign_role", { _role: pendingRole });
+      localStorage.removeItem("pending_role");
+      localStorage.removeItem("pending_role_redirect");
+      if (!roleErr && pendingRedirect) {
+        navigate(pendingRedirect);
+        return { data };
+      }
+    }
+
     navigate("/dashboard");
     return { data };
   };
