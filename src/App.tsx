@@ -151,17 +151,47 @@ const App = () => (
              }
            />
  
-         {/* Onboarding Route */}
-         <Route
-           path="/onboarding"
-           element={
-             <ProtectedRoute>
-               <Suspense fallback={<PageLoader />}>
-                 <Onboarding />
-               </Suspense>
-             </ProtectedRoute>
-           }
-         />
+          {/* Onboarding Routes */}
+          <Route
+            path="/onboarding"
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<PageLoader />}>
+                  <Onboarding />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/trainer"
+            element={
+              <ProtectedRoute requiredRoles={["trainer"]}>
+                <Suspense fallback={<PageLoader />}>
+                  <TrainerOnboarding />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/gym"
+            element={
+              <ProtectedRoute requiredRoles={["gym_admin"]}>
+                <Suspense fallback={<PageLoader />}>
+                  <GymOnboarding />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/upgrade"
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<PageLoader />}>
+                  <UpgradeRole />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
 
          {/* Trainer Routes */}
          <Route
