@@ -12,14 +12,16 @@
    Building2,
    Calendar,
    Target,
-   Activity,
-   Settings,
-   LogOut,
-   ClipboardList,
-   TrendingUp,
-   Shield,
-   X,
- } from "lucide-react";
+  Activity,
+  Settings,
+  LogOut,
+  ClipboardList,
+  TrendingUp,
+  Shield,
+  Gift,
+  Mail,
+  X,
+} from "lucide-react";
  import { cn } from "@/lib/utils";
  
  interface SidebarProps {
@@ -37,14 +39,16 @@
    roles?: AppRole[];
  }
  
- const userNavItems: NavItem[] = [
-   { label: "Today", href: "/dashboard", icon: LayoutDashboard },
-   { label: "My Progress", href: "/dashboard/progress", icon: TrendingUp },
-   { label: "Workouts", href: "/dashboard/workouts", icon: Dumbbell },
-   { label: "Goals", href: "/dashboard/goals", icon: Target },
-   { label: "Activity", href: "/dashboard/activity", icon: Activity },
-   { label: "Profile", href: "/dashboard/profile", icon: UserIcon },
- ];
+  const userNavItems: NavItem[] = [
+    { label: "Today", href: "/dashboard", icon: LayoutDashboard },
+    { label: "Workouts", href: "/dashboard/workouts", icon: Dumbbell },
+    { label: "My Progress", href: "/dashboard/progress", icon: TrendingUp },
+    { label: "Goals", href: "/dashboard/goals", icon: Target },
+    { label: "Activity", href: "/dashboard/activity", icon: Activity },
+    { label: "Invitations", href: "/dashboard/invitations", icon: Mail },
+    { label: "Refer & Earn", href: "/dashboard/referrals", icon: Gift },
+    { label: "Profile", href: "/dashboard/profile", icon: UserIcon },
+  ];
  
 const trainerNavItems: NavItem[] = [
   { label: "Trainer Dashboard", href: "/trainer", icon: ClipboardList, roles: ["trainer"] },
@@ -188,10 +192,10 @@ const trainerNavItems: NavItem[] = [
                className="flex-1 justify-start"
                asChild
              >
-               <NavLink to="/dashboard/settings">
-                 <Settings className="h-4 w-4 mr-2" />
-                 Settings
-               </NavLink>
+              <NavLink to="/dashboard/profile">
+                <Settings className="h-4 w-4 mr-2" />
+                Settings
+              </NavLink>
              </Button>
              <Button
                variant="ghost"

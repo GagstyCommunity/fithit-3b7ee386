@@ -325,6 +325,54 @@ export type Database = {
         }
         Relationships: []
       }
+      invitations: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          invite_code: string
+          invite_type: string
+          message: string | null
+          recipient_email: string | null
+          recipient_id: string | null
+          responded_at: string | null
+          sender_id: string
+          sender_role: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          invite_code?: string
+          invite_type: string
+          message?: string | null
+          recipient_email?: string | null
+          recipient_id?: string | null
+          responded_at?: string | null
+          sender_id: string
+          sender_role: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          invite_code?: string
+          invite_type?: string
+          message?: string | null
+          recipient_email?: string | null
+          recipient_id?: string | null
+          responded_at?: string | null
+          sender_id?: string
+          sender_role?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -367,6 +415,86 @@ export type Database = {
           timezone?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      referral_earnings: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          id: string
+          period_end: string
+          period_start: string
+          referral_id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          id?: string
+          period_end: string
+          period_start: string
+          referral_id: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          period_end?: string
+          period_start?: string
+          referral_id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_earnings_referral_id_fkey"
+            columns: ["referral_id"]
+            isOneToOne: false
+            referencedRelation: "referrals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referrals: {
+        Row: {
+          commission_percent: number
+          created_at: string
+          expires_at: string
+          id: string
+          referral_code: string | null
+          referred_user_id: string
+          referrer_id: string
+          referrer_role: string
+          status: string
+        }
+        Insert: {
+          commission_percent?: number
+          created_at?: string
+          expires_at?: string
+          id?: string
+          referral_code?: string | null
+          referred_user_id: string
+          referrer_id: string
+          referrer_role: string
+          status?: string
+        }
+        Update: {
+          commission_percent?: number
+          created_at?: string
+          expires_at?: string
+          id?: string
+          referral_code?: string | null
+          referred_user_id?: string
+          referrer_id?: string
+          referrer_role?: string
+          status?: string
         }
         Relationships: []
       }
@@ -456,6 +584,36 @@ export type Database = {
           granted_by?: string | null
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wallets: {
+        Row: {
+          balance: number
+          created_at: string
+          currency: string
+          id: string
+          lifetime_earnings: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          lifetime_earnings?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          lifetime_earnings?: number
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
