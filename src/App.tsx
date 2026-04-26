@@ -21,6 +21,9 @@ const ProfileSettings = lazy(() => import("./pages/dashboard/ProfileSettings"));
 const Goals = lazy(() => import("./pages/dashboard/Goals"));
 const Progress = lazy(() => import("./pages/dashboard/Progress"));
 const Activity = lazy(() => import("./pages/dashboard/Activity"));
+const Workouts = lazy(() => import("./pages/dashboard/Workouts"));
+const Referrals = lazy(() => import("./pages/dashboard/Referrals"));
+const Invitations = lazy(() => import("./pages/dashboard/Invitations"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
 const TrainerDashboard = lazy(() => import("./pages/trainer/TrainerDashboard"));
 const TrainerPrograms = lazy(() => import("./pages/trainer/TrainerPrograms"));
@@ -103,6 +106,39 @@ const App = () => (
                <ProtectedRoute>
                  <Suspense fallback={<PageLoader />}>
                    <Activity />
+                 </Suspense>
+               </ProtectedRoute>
+             }
+           />
+
+           <Route
+             path="/dashboard/workouts"
+             element={
+               <ProtectedRoute>
+                 <Suspense fallback={<PageLoader />}>
+                   <Workouts />
+                 </Suspense>
+               </ProtectedRoute>
+             }
+           />
+
+           <Route
+             path="/dashboard/referrals"
+             element={
+               <ProtectedRoute>
+                 <Suspense fallback={<PageLoader />}>
+                   <Referrals />
+                 </Suspense>
+               </ProtectedRoute>
+             }
+           />
+
+           <Route
+             path="/dashboard/invitations"
+             element={
+               <ProtectedRoute>
+                 <Suspense fallback={<PageLoader />}>
+                   <Invitations />
                  </Suspense>
                </ProtectedRoute>
              }
