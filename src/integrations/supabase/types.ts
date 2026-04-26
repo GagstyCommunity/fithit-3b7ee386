@@ -325,6 +325,54 @@ export type Database = {
         }
         Relationships: []
       }
+      gym_profiles: {
+        Row: {
+          amenities: string[] | null
+          business_address: string | null
+          city: string | null
+          contact_phone: string | null
+          created_at: string
+          gym_name: string
+          id: string
+          opening_hours: Json | null
+          profile_complete: boolean
+          updated_at: string
+          user_id: string
+          verified: boolean
+          website: string | null
+        }
+        Insert: {
+          amenities?: string[] | null
+          business_address?: string | null
+          city?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          gym_name?: string
+          id?: string
+          opening_hours?: Json | null
+          profile_complete?: boolean
+          updated_at?: string
+          user_id: string
+          verified?: boolean
+          website?: string | null
+        }
+        Update: {
+          amenities?: string[] | null
+          business_address?: string | null
+          city?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          gym_name?: string
+          id?: string
+          opening_hours?: Json | null
+          profile_complete?: boolean
+          updated_at?: string
+          user_id?: string
+          verified?: boolean
+          website?: string | null
+        }
+        Relationships: []
+      }
       invitations: {
         Row: {
           created_at: string
@@ -561,6 +609,48 @@ export type Database = {
           started_at?: string
           status?: string
           trainer_id?: string
+        }
+        Relationships: []
+      }
+      trainer_profiles: {
+        Row: {
+          accepting_clients: boolean
+          bio: string | null
+          certifications: string[] | null
+          created_at: string
+          hourly_rate: number | null
+          id: string
+          profile_complete: boolean
+          specialties: string[] | null
+          updated_at: string
+          user_id: string
+          years_experience: number | null
+        }
+        Insert: {
+          accepting_clients?: boolean
+          bio?: string | null
+          certifications?: string[] | null
+          created_at?: string
+          hourly_rate?: number | null
+          id?: string
+          profile_complete?: boolean
+          specialties?: string[] | null
+          updated_at?: string
+          user_id: string
+          years_experience?: number | null
+        }
+        Update: {
+          accepting_clients?: boolean
+          bio?: string | null
+          certifications?: string[] | null
+          created_at?: string
+          hourly_rate?: number | null
+          id?: string
+          profile_complete?: boolean
+          specialties?: string[] | null
+          updated_at?: string
+          user_id?: string
+          years_experience?: number | null
         }
         Relationships: []
       }
@@ -850,6 +940,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      self_assign_role: {
+        Args: { _role: Database["public"]["Enums"]["app_role"] }
+        Returns: undefined
       }
     }
     Enums: {

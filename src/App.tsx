@@ -11,10 +11,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
  import Index from "./pages/Index";
  import Login from "./pages/Login";
  import Signup from "./pages/Signup";
+ import TrainerSignup from "./pages/TrainerSignup";
+ import GymSignup from "./pages/GymSignup";
  import ForgotPassword from "./pages/ForgotPassword";
  import ResetPassword from "./pages/ResetPassword";
  import NotFound from "./pages/NotFound";
- 
+
 // Lazy load dashboard pages
 const UserDashboard = lazy(() => import("./pages/dashboard/UserDashboard"));
 const ProfileSettings = lazy(() => import("./pages/dashboard/ProfileSettings"));
@@ -24,7 +26,10 @@ const Activity = lazy(() => import("./pages/dashboard/Activity"));
 const Workouts = lazy(() => import("./pages/dashboard/Workouts"));
 const Referrals = lazy(() => import("./pages/dashboard/Referrals"));
 const Invitations = lazy(() => import("./pages/dashboard/Invitations"));
+const UpgradeRole = lazy(() => import("./pages/dashboard/UpgradeRole"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
+const TrainerOnboarding = lazy(() => import("./pages/onboarding/TrainerOnboarding"));
+const GymOnboarding = lazy(() => import("./pages/onboarding/GymOnboarding"));
 const TrainerDashboard = lazy(() => import("./pages/trainer/TrainerDashboard"));
 const TrainerPrograms = lazy(() => import("./pages/trainer/TrainerPrograms"));
 const TrainerClients = lazy(() => import("./pages/trainer/TrainerClients"));
@@ -52,6 +57,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/signup/trainer" element={<TrainerSignup />} />
+          <Route path="/signup/gym" element={<GymSignup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
 
@@ -144,17 +151,47 @@ const App = () => (
              }
            />
  
-         {/* Onboarding Route */}
-         <Route
-           path="/onboarding"
-           element={
-             <ProtectedRoute>
-               <Suspense fallback={<PageLoader />}>
-                 <Onboarding />
-               </Suspense>
-             </ProtectedRoute>
-           }
-         />
+          {/* Onboarding Routes */}
+          <Route
+            path="/onboarding"
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<PageLoader />}>
+                  <Onboarding />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/trainer"
+            element={
+              <ProtectedRoute requiredRoles={["trainer"]}>
+                <Suspense fallback={<PageLoader />}>
+                  <TrainerOnboarding />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/gym"
+            element={
+              <ProtectedRoute requiredRoles={["gym_admin"]}>
+                <Suspense fallback={<PageLoader />}>
+                  <GymOnboarding />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/upgrade"
+            element={
+              <ProtectedRoute>
+                <Suspense fallback={<PageLoader />}>
+                  <UpgradeRole />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
 
          {/* Trainer Routes */}
          <Route

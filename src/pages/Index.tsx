@@ -415,9 +415,11 @@ export default function Index() {
             <p className="text-sm text-muted-foreground text-center">
               Built for real people, not just gyms · Designed for India, scalable globally
             </p>
-            <div className="flex items-center gap-6 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
               <Link to="/login" className="hover:text-foreground transition-colors">Sign In</Link>
-              <Link to="/signup" className="hover:text-foreground transition-colors">Start Free</Link>
+              <Link to="/signup" className="hover:text-foreground transition-colors">User Signup</Link>
+              <Link to="/signup/trainer" className="hover:text-foreground transition-colors">Trainer Signup</Link>
+              <Link to="/signup/gym" className="hover:text-foreground transition-colors">Gym Signup</Link>
             </div>
           </div>
           <p className="text-xs text-muted-foreground text-center mt-6">

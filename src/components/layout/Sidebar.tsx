@@ -20,6 +20,7 @@
   Shield,
   Gift,
   Mail,
+  Sparkles,
   X,
 } from "lucide-react";
  import { cn } from "@/lib/utils";
@@ -47,6 +48,7 @@
     { label: "Activity", href: "/dashboard/activity", icon: Activity },
     { label: "Invitations", href: "/dashboard/invitations", icon: Mail },
     { label: "Refer & Earn", href: "/dashboard/referrals", icon: Gift },
+    { label: "Become Trainer / Gym", href: "/dashboard/upgrade", icon: Sparkles },
     { label: "Profile", href: "/dashboard/profile", icon: UserIcon },
   ];
  
