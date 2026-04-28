@@ -2,6 +2,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TodayWorkout } from "@/components/workout/TodayWorkout";
+import { FitnessIdCard } from "@/components/identity/FitnessIdCard";
+import { ProfileCompletionCard } from "@/components/dashboard/ProfileCompletionCard";
 import { Dumbbell, Calendar, Target, Flame, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -11,11 +13,17 @@ export default function UserDashboard() {
   return (
     <DashboardLayout>
       {/* Welcome Section */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">What To Do Today</h1>
-        <p className="text-muted-foreground">
-          Welcome back! Here's your fitness plan for today.
-        </p>
+      <div className="mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold mb-1">Welcome back</h1>
+        <p className="text-muted-foreground text-sm">Your fitness identity, score and plan — all in one place.</p>
+      </div>
+
+      {/* Profile Completion Nudge (trainer/gym) */}
+      <ProfileCompletionCard />
+
+      {/* Fitness Identity hero card */}
+      <div className="mb-6">
+        <FitnessIdCard />
       </div>
 
       {/* Quick Stats */}
