@@ -387,14 +387,22 @@ export function TodayWorkout() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col items-center justify-center py-12">
+          <div className="flex flex-col items-center justify-center py-10 text-center">
             <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
               <Dumbbell className="w-8 h-8 text-muted-foreground" />
             </div>
-            <h3 className="text-lg font-semibold mb-2">No workout for today</h3>
-            <p className="text-muted-foreground text-center max-w-md">
-              You don't have a workout assigned for today. Connect with a trainer to get personalized workout plans.
+            <h3 className="text-lg font-semibold mb-2">No workout assigned for today</h3>
+            <p className="text-muted-foreground max-w-md mb-6">
+              You don't have a trainer-assigned program yet. Connect with a trainer for personalized plans, or set your own goals to get started.
             </p>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Button asChild>
+                <a href="/dashboard/invitations">Find a Trainer</a>
+              </Button>
+              <Button variant="outline" asChild>
+                <a href="/dashboard/goals">Set Your Goals</a>
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
