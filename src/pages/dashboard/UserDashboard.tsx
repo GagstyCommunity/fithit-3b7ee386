@@ -17,9 +17,6 @@ export default function UserDashboard() {
         <p className="text-muted-foreground text-sm">Your fitness identity, score and plan — all in one place.</p>
       </div>
 
-      {/* Profile Completion Nudge (trainer/gym) */}
-      <ProfileCompletionCard />
-
       {/* Fitness Identity hero card */}
       <div className="mb-6">
         <FitnessIdCard />
