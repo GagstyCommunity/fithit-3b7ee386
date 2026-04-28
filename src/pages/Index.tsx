@@ -91,55 +91,97 @@ export default function Index() {
         </div>
       </nav>
 
-      {/* HERO */}
-      <section className="py-16 md:py-28 overflow-hidden">
+      {/* HERO — Fitness Identity positioning */}
+      <section className="py-16 md:py-28 overflow-hidden relative">
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute top-20 left-1/3 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+        </div>
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center space-y-8 animate-slide-up">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20">
-              <Shield className="w-4 h-4" />
-              You own your fitness data — not your gym
+          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+            <div className="space-y-6 animate-slide-up">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20">
+                <Sparkles className="w-4 h-4" />
+                Your Fitness Identity — Portable. Permanent. Yours.
+              </div>
+
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.05]">
+                Your fitness identity that
+                <br />
+                <span className="text-primary">moves with you</span>
+                <br />
+                — across gyms, trainers, life.
+              </h1>
+
+              <p className="text-lg text-muted-foreground max-w-xl leading-relaxed">
+                One <strong className="text-foreground">Fitness ID</strong>. One score. One streak.
+                Powering user progress, trainer performance, and gym revenue — in one system.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button size="lg" asChild className="text-base px-7 h-12 shadow-lg">
+                  <Link to="/signup">
+                    Create your Fitness ID
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" asChild className="text-base px-7 h-12">
+                  <Link to="/signup/gym">List Your Gym</Link>
+                </Button>
+              </div>
+
+              <div className="flex flex-wrap gap-x-6 gap-y-2 pt-2 text-sm text-muted-foreground">
+                <span className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-primary" />2 months free</span>
+                <span className="flex items-center gap-1.5"><Lock className="h-4 w-4 text-primary" />You own your data</span>
+                <span className="flex items-center gap-1.5"><Repeat className="h-4 w-4 text-primary" />Switch gym, keep progress</span>
+              </div>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground leading-tight">
-              Your Fitness History.
-              <br />
-              <span className="text-primary">Owned by You.</span>
-              <br />
-              Not Your Gym.
-            </h1>
-
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Track your workouts, diet, and progress in one place — switch gyms or
-              trainers anytime <strong className="text-foreground">without losing your journey</strong>.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Button size="lg" asChild className="text-base px-8 h-12 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]">
-                <Link to="/signup">
-                  Start Free (2 Months)
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild className="text-base px-8 h-12">
-                <Link to="/signup">
-                  Explore Trainers Near You
-                  <ChevronRight className="ml-1 h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-6 pt-8 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-primary" />
-                <span>2 months free</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Lock className="h-4 w-4 text-primary" />
-                <span>You control access</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-primary" />
-                <span>No credit card required</span>
+            {/* Dashboard mockup */}
+            <div className="relative">
+              <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-primary/5 rounded-3xl blur-2xl" />
+              <div className="relative bg-card border border-border rounded-2xl p-6 shadow-2xl">
+                <div className="flex items-start justify-between mb-5">
+                  <div>
+                    <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Fitness ID</p>
+                    <p className="font-mono text-2xl font-bold">FH-A7K2X9</p>
+                  </div>
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold border border-primary/20">
+                    <Sparkles className="w-3 h-3" /> Athlete
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 gap-4 mb-5">
+                  <div>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-4xl font-bold text-primary">742</span>
+                      <span className="text-xs text-muted-foreground">/ 1000</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">Fitness Score</p>
+                    <div className="h-1.5 bg-muted rounded-full mt-2 overflow-hidden">
+                      <div className="h-full bg-primary rounded-full" style={{ width: "74%" }} />
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="flex items-center justify-end gap-1.5">
+                      <span className="text-4xl font-bold">21</span>
+                      <span className="text-2xl">🔥</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">day streak</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-2 pt-4 border-t border-border">
+                  <div className="text-center">
+                    <p className="text-lg font-bold">68%</p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">ahead of</p>
+                  </div>
+                  <div className="text-center border-x border-border">
+                    <p className="text-lg font-bold">+3%</p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">this week</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-lg font-bold">3</p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">goals</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -157,9 +199,9 @@ export default function Index() {
             </h2>
             <div className="grid sm:grid-cols-3 gap-4 pt-4">
               {[
-                "Your data stays with you",
-                "Trainers come and go — your progress stays",
-                "Gyms don't own your history",
+                "Never lose your progress again",
+                "Switch gyms without starting over",
+                "Trainers come and go — your record stays",
               ].map((point, i) => (
                 <div key={i} className="bg-card border border-border rounded-xl p-5 flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
