@@ -3,7 +3,6 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TodayWorkout } from "@/components/workout/TodayWorkout";
 import { FitnessIdCard } from "@/components/identity/FitnessIdCard";
-import { ProfileCompletionCard } from "@/components/dashboard/ProfileCompletionCard";
 import { Dumbbell, Calendar, Target, Flame, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
