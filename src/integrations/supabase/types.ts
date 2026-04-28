@@ -427,6 +427,7 @@ export type Database = {
           created_at: string
           date_of_birth: string | null
           email: string
+          fitness_id: string | null
           full_name: string | null
           id: string
           notification_preferences: Json | null
@@ -441,6 +442,7 @@ export type Database = {
           created_at?: string
           date_of_birth?: string | null
           email: string
+          fitness_id?: string | null
           full_name?: string | null
           id?: string
           notification_preferences?: Json | null
@@ -455,6 +457,7 @@ export type Database = {
           created_at?: string
           date_of_birth?: string | null
           email?: string
+          fitness_id?: string | null
           full_name?: string | null
           id?: string
           notification_preferences?: Json | null
@@ -930,10 +933,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      generate_fitness_id: { Args: never; Returns: string }
+      get_fitness_score: { Args: { _user_id: string }; Returns: number }
+      get_gym_profile_completion: {
+        Args: { _user_id: string }
+        Returns: number
+      }
+      get_trainer_profile_completion: {
+        Args: { _user_id: string }
+        Returns: number
+      }
       get_user_roles: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"][]
       }
+      get_user_streak: { Args: { _user_id: string }; Returns: number }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
