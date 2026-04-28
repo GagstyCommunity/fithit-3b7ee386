@@ -3,8 +3,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
- import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
- import { lazy, Suspense } from "react";
+  import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+  import { RoleGate } from "@/components/auth/RoleGate";
+  import { lazy, Suspense } from "react";
  import { Loader2 } from "lucide-react";
  
  // Pages
@@ -193,48 +194,46 @@ const App = () => (
             }
           />
 
-         {/* Trainer Routes */}
+         {/* Trainer Routes (gated by complete profile) */}
          <Route
            path="/trainer"
            element={
              <ProtectedRoute requiredRoles={["trainer"]}>
-               <Suspense fallback={<PageLoader />}>
-                 <TrainerDashboard />
-               </Suspense>
+               <RoleGate requires="trainer_profile">
+                 <Suspense fallback={<PageLoader />}><TrainerDashboard /></Suspense>
+               </RoleGate>
              </ProtectedRoute>
            }
          />
-         
           <Route
             path="/trainer/programs"
             element={
               <ProtectedRoute requiredRoles={["trainer"]}>
-                <Suspense fallback={<PageLoader />}>
-                  <TrainerPrograms />
-                </Suspense>
+                <RoleGate requires="trainer_profile">
+                  <Suspense fallback={<PageLoader />}><TrainerPrograms /></Suspense>
+                </RoleGate>
               </ProtectedRoute>
             }
           />
-          
           <Route
             path="/trainer/clients"
             element={
               <ProtectedRoute requiredRoles={["trainer"]}>
-                <Suspense fallback={<PageLoader />}>
-                  <TrainerClients />
-                </Suspense>
+                <RoleGate requires="trainer_profile">
+                  <Suspense fallback={<PageLoader />}><TrainerClients /></Suspense>
+                </RoleGate>
               </ProtectedRoute>
             }
           />
- 
-            {/* Gym Admin Routes */}
+
+           {/* Gym Admin Routes (gated by complete profile) */}
            <Route
              path="/gym"
              element={
                <ProtectedRoute requiredRoles={["gym_admin"]}>
-                 <Suspense fallback={<PageLoader />}>
-                   <GymDashboard />
-                 </Suspense>
+                 <RoleGate requires="gym_profile">
+                   <Suspense fallback={<PageLoader />}><GymDashboard /></Suspense>
+                 </RoleGate>
                </ProtectedRoute>
              }
            />
