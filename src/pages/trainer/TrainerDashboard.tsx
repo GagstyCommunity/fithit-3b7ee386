@@ -113,46 +113,49 @@ export default function TrainerDashboard() {
              <p className="text-muted-foreground text-center max-w-md mb-6">
                Start building your client base. Add clients to create personalized workout programs.
              </p>
-             <Button>
-               <Plus className="h-4 w-4 mr-2" />
-               Add Your First Client
-             </Button>
-           </div>
-         </CardContent>
-       </Card>
+              <Button asChild>
+                <Link to="/dashboard/invitations"><Plus className="h-4 w-4 mr-2" />Invite Your First Client</Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
  
-       {/* Quick Actions */}
-       <div className="grid gap-4 md:grid-cols-2">
-         <Card className="cursor-pointer hover:bg-muted/50 transition-colors">
-           <CardContent className="flex items-center justify-between p-4">
-             <div className="flex items-center gap-3">
-               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                 <ClipboardList className="w-5 h-5 text-primary" />
-               </div>
-               <div>
-                 <p className="font-medium">Create Program</p>
-                 <p className="text-sm text-muted-foreground">Design a new workout program</p>
-               </div>
-             </div>
-             <ChevronRight className="h-5 w-5 text-muted-foreground" />
-           </CardContent>
-         </Card>
- 
-         <Card className="cursor-pointer hover:bg-muted/50 transition-colors">
-           <CardContent className="flex items-center justify-between p-4">
-             <div className="flex items-center gap-3">
-               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                 <Calendar className="w-5 h-5 text-primary" />
-               </div>
-               <div>
-                 <p className="font-medium">View Schedule</p>
-                 <p className="text-sm text-muted-foreground">See upcoming client sessions</p>
-               </div>
-             </div>
-             <ChevronRight className="h-5 w-5 text-muted-foreground" />
-           </CardContent>
-         </Card>
-       </div>
+        {/* Quick Actions */}
+        <div className="grid gap-4 md:grid-cols-2">
+          <Link to="/trainer/programs">
+            <Card className="cursor-pointer hover:bg-muted/50 transition-colors">
+              <CardContent className="flex items-center justify-between p-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <ClipboardList className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-medium">Create Program</p>
+                    <p className="text-sm text-muted-foreground">Design a new workout program</p>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-muted-foreground" />
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link to="/trainer/clients">
+            <Card className="cursor-pointer hover:bg-muted/50 transition-colors">
+              <CardContent className="flex items-center justify-between p-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Calendar className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-medium">My Clients</p>
+                    <p className="text-sm text-muted-foreground">View and manage clients</p>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-muted-foreground" />
+              </CardContent>
+            </Card>
+          </Link>
+        </div>
      </DashboardLayout>
    );
  }
