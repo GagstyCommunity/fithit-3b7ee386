@@ -25,6 +25,7 @@ const Goals = lazy(() => import("./pages/dashboard/Goals"));
 const Progress = lazy(() => import("./pages/dashboard/Progress"));
 const Activity = lazy(() => import("./pages/dashboard/Activity"));
 const Workouts = lazy(() => import("./pages/dashboard/Workouts"));
+const QuickWorkout = lazy(() => import("./pages/dashboard/QuickWorkout"));
 const Referrals = lazy(() => import("./pages/dashboard/Referrals"));
 const Invitations = lazy(() => import("./pages/dashboard/Invitations"));
 const UpgradeRole = lazy(() => import("./pages/dashboard/UpgradeRole"));
