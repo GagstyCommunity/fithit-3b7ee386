@@ -43,6 +43,7 @@
   const userNavItems: NavItem[] = [
     { label: "Today", href: "/dashboard", icon: LayoutDashboard },
     { label: "Workouts", href: "/dashboard/workouts", icon: Dumbbell },
+    { label: "Quick Workout", href: "/dashboard/quick-workout", icon: Sparkles },
     { label: "My Progress", href: "/dashboard/progress", icon: TrendingUp },
     { label: "Goals", href: "/dashboard/goals", icon: Target },
     { label: "Activity", href: "/dashboard/activity", icon: Activity },
