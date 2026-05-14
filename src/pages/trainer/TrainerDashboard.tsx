@@ -1,49 +1,70 @@
- import { DashboardLayout } from "@/components/layout/DashboardLayout";
- import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
- import { Button } from "@/components/ui/button";
- import { Users, Calendar, ClipboardList, TrendingUp, Plus, ChevronRight } from "lucide-react";
- 
- export default function TrainerDashboard() {
-   return (
-     <DashboardLayout>
-       {/* Header */}
-       <div className="flex items-center justify-between mb-8">
-         <div>
-           <h1 className="text-3xl font-bold mb-2">Trainer Dashboard</h1>
-           <p className="text-muted-foreground">
-             Manage your clients and create workout programs.
-           </p>
-         </div>
-         <Button>
-           <Plus className="h-4 w-4 mr-2" />
-           Add Client
-         </Button>
-       </div>
- 
-       {/* Stats */}
-       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4 mb-8">
-         <Card>
-           <CardHeader className="flex flex-row items-center justify-between pb-2">
-             <CardTitle className="text-sm font-medium text-muted-foreground">
-               Total Clients
-             </CardTitle>
-             <Users className="h-4 w-4 text-muted-foreground" />
-           </CardHeader>
-           <CardContent>
-             <div className="text-2xl font-bold">0</div>
-             <p className="text-xs text-muted-foreground">Active clients</p>
-           </CardContent>
-         </Card>
- 
-         <Card>
-           <CardHeader className="flex flex-row items-center justify-between pb-2">
-             <CardTitle className="text-sm font-medium text-muted-foreground">
-               Programs
-             </CardTitle>
-             <ClipboardList className="h-4 w-4 text-muted-foreground" />
-           </CardHeader>
-           <CardContent>
-             <div className="text-2xl font-bold">0</div>
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { Users, Calendar, ClipboardList, TrendingUp, Plus, ChevronRight } from "lucide-react";
+
+export default function TrainerDashboard() {
+  const { user } = useAuth();
+  const [clients, setClients] = useState(0);
+  const [programs, setPrograms] = useState(0);
+
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const [{ count: cCount }, { count: pCount }] = await Promise.all([
+        supabase.from("trainer_clients").select("id", { count: "exact", head: true })
+          .eq("trainer_id", user.id).eq("status", "active"),
+        supabase.from("workout_programs").select("id", { count: "exact", head: true })
+          .eq("trainer_id", user.id).eq("status", "active"),
+      ]);
+      setClients(cCount ?? 0);
+      setPrograms(pCount ?? 0);
+    })();
+  }, [user]);
+
+  return (
+    <DashboardLayout>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold mb-2">Trainer Dashboard</h1>
+          <p className="text-muted-foreground">
+            Manage your clients and create workout programs.
+          </p>
+        </div>
+        <Button asChild>
+          <Link to="/dashboard/invitations"><Plus className="h-4 w-4 mr-2" />Invite Client</Link>
+        </Button>
+      </div>
+
+      {/* Stats */}
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4 mb-8">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Total Clients
+            </CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{clients}</div>
+            <p className="text-xs text-muted-foreground">Active clients</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Programs
+            </CardTitle>
+            <ClipboardList className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{programs}</div>
              <p className="text-xs text-muted-foreground">Active programs</p>
            </CardContent>
          </Card>
