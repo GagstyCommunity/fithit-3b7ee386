@@ -393,14 +393,17 @@ export function TodayWorkout() {
             </div>
             <h3 className="text-lg font-semibold mb-2">No workout assigned for today</h3>
             <p className="text-muted-foreground max-w-md mb-6">
-              You don't have a trainer-assigned program yet. Connect with a trainer for personalized plans, or set your own goals to get started.
+              No trainer connected yet. Build your own session in seconds, or connect with a trainer for a personalized plan.
             </p>
             <div className="flex flex-col sm:flex-row gap-2">
               <Button asChild>
-                <a href="/dashboard/invitations">Find a Trainer</a>
+                <a href="/dashboard/quick-workout">Log a Quick Workout</a>
               </Button>
               <Button variant="outline" asChild>
-                <a href="/dashboard/goals">Set Your Goals</a>
+                <a href="/dashboard/invitations">Find a Trainer</a>
+              </Button>
+              <Button variant="ghost" asChild>
+                <a href="/dashboard/goals">Set Goals</a>
               </Button>
             </div>
           </div>
