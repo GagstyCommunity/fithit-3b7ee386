@@ -132,6 +132,17 @@ const App = () => (
            />
 
            <Route
+             path="/dashboard/quick-workout"
+             element={
+               <ProtectedRoute>
+                 <Suspense fallback={<PageLoader />}>
+                   <QuickWorkout />
+                 </Suspense>
+               </ProtectedRoute>
+             }
+           />
+
+           <Route
              path="/dashboard/referrals"
              element={
                <ProtectedRoute>
