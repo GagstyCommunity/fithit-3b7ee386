@@ -1,4 +1,12 @@
-import { useEffect, useState, useCallback } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  ReactNode,
+} from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
@@ -6,102 +14,151 @@ import { useToast } from "@/hooks/use-toast";
 
 export type AppRole = "user" | "trainer" | "gym_admin" | "super_admin";
 
-interface AuthState {
-  user: User | null;
-  session: Session | null;
-  roles: AppRole[];
-  isLoading: boolean;
+export interface Profile {
+  id: string;
+  user_id: string;
+  email: string;
+  full_name: string | null;
+  username: string | null;
+  avatar_url: string | null;
+  phone: string | null;
+  date_of_birth: string | null;
+  gender: string | null;
+  location: string | null;
+  city: string | null;
+  fitness_id: string | null;
+  onboarding_completed: boolean;
 }
 
-export function useAuth() {
-  const [authState, setAuthState] = useState<AuthState>({
-    user: null,
-    session: null,
-    roles: [],
-    isLoading: true,
-  });
+interface AuthContextValue {
+  user: User | null;
+  session: Session | null;
+  profile: Profile | null;
+  roles: AppRole[];
+  isLoading: boolean;
+  isProfileLoading: boolean;
+  isAuthenticated: boolean;
+  profileError: string | null;
+  hasRole: (role: AppRole) => boolean;
+  refreshProfile: () => Promise<void>;
+  signUp: (
+    email: string,
+    password: string,
+    fullName: string
+  ) => Promise<{ error?: unknown; data?: unknown; autoConfirmed?: boolean }>;
+  signIn: (email: string, password: string) => Promise<{ error?: unknown; data?: unknown }>;
+  signOut: () => Promise<{ error?: unknown }>;
+  resetPassword: (email: string) => Promise<{ error?: unknown }>;
+  updatePassword: (newPassword: string) => Promise<{ error?: unknown }>;
+}
+
+const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+
+function friendlyAuthError(message: string): string {
+  const m = message.toLowerCase();
+  if (m.includes("already registered") || m.includes("already been registered"))
+    return "That email already has a FitHit account. Try signing in instead.";
+  if (m.includes("invalid login credentials")) return "Email or password is incorrect.";
+  if (m.includes("email not confirmed"))
+    return "Please confirm your email first — check your inbox for the link.";
+  if (m.includes("password")) return message;
+  if (m.includes("failed to fetch") || m.includes("network"))
+    return "Network problem. Check your connection and try again.";
+  return message;
+}
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [roles, setRoles] = useState<AppRole[]>([]);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isProfileLoading, setIsProfileLoading] = useState(false);
+  const [profileError, setProfileError] = useState<string | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const loadedFor = useRef<string | null>(null);
 
-  const fetchUserRoles = useCallback(async (userId: string): Promise<AppRole[]> => {
+  const loadUserData = useCallback(async (userId: string) => {
+    setIsProfileLoading(true);
+    setProfileError(null);
     try {
-      const { data, error } = await supabase.rpc("get_user_roles", {
-        _user_id: userId,
-      });
-      if (error) {
-        console.error("Error fetching roles:", error);
-        return ["user"];
+      const [profileRes, rolesRes] = await Promise.all([
+        supabase.from("profiles").select("*").eq("user_id", userId).maybeSingle(),
+        supabase.rpc("get_user_roles", { _user_id: userId }),
+      ]);
+
+      if (profileRes.error) {
+        setProfileError(profileRes.error.message);
+      } else {
+        setProfile((profileRes.data as unknown as Profile) ?? null);
       }
-      return (data as AppRole[]) || ["user"];
-    } catch (error) {
-      console.error("Error fetching roles:", error);
-      return ["user"];
+      setRoles(rolesRes.error ? ["user"] : ((rolesRes.data as AppRole[]) ?? ["user"]));
+    } catch (err) {
+      setProfileError(err instanceof Error ? err.message : "Could not load your profile.");
+    } finally {
+      setIsProfileLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    // Set up auth state listener BEFORE getting session
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (session?.user) {
-          // Defer role fetch to avoid blocking
-          const roles = await fetchUserRoles(session.user.id);
-          setAuthState({
-            user: session.user,
-            session,
-            roles,
-            isLoading: false,
-          });
-        } else {
-          setAuthState({
-            user: null,
-            session: null,
-            roles: [],
-            isLoading: false,
-          });
-        }
+    let active = true;
 
-        // Handle auth events
-        if (event === "SIGNED_OUT") {
-          navigate("/login");
-        }
-      }
-    );
+    // Register the listener first so no event is missed.
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, nextSession) => {
+      if (!active) return;
+      setSession(nextSession);
+      setUser(nextSession?.user ?? null);
 
-    // Get initial session
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      if (session?.user) {
-        const roles = await fetchUserRoles(session.user.id);
-        setAuthState({
-          user: session.user,
-          session,
-          roles,
-          isLoading: false,
-        });
+      if (nextSession?.user) {
+        if (loadedFor.current !== nextSession.user.id) {
+          loadedFor.current = nextSession.user.id;
+          // Defer the Supabase call out of the callback to avoid deadlocks.
+          setTimeout(() => {
+            if (active) void loadUserData(nextSession.user.id);
+          }, 0);
+        }
       } else {
-        setAuthState({
-          user: null,
-          session: null,
-          roles: [],
-          isLoading: false,
-        });
+        loadedFor.current = null;
+        setProfile(null);
+        setRoles([]);
       }
+
+      // Auth has resolved as soon as we know the session state.
+      setIsLoading(false);
+    });
+
+    // Then hydrate the existing session from storage.
+    supabase.auth.getSession().then(({ data: { session: existing } }) => {
+      if (!active) return;
+      setSession(existing);
+      setUser(existing?.user ?? null);
+      if (existing?.user && loadedFor.current !== existing.user.id) {
+        loadedFor.current = existing.user.id;
+        void loadUserData(existing.user.id);
+      }
+      setIsLoading(false);
     });
 
     return () => {
+      active = false;
       subscription.unsubscribe();
     };
-  }, [fetchUserRoles, navigate]);
+  }, [loadUserData]);
+
+  const refreshProfile = useCallback(async () => {
+    if (user) await loadUserData(user.id);
+  }, [user, loadUserData]);
 
   const signUp = async (email: string, password: string, fullName: string) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: window.location.origin,
-        data: {
-          full_name: fullName,
-        },
+        emailRedirectTo: `${window.location.origin}/dashboard`,
+        data: { full_name: fullName },
       },
     });
 
@@ -109,18 +166,14 @@ export function useAuth() {
       toast({
         variant: "destructive",
         title: "Sign up failed",
-        description: error.message,
+        description: friendlyAuthError(error.message),
       });
       return { error };
     }
 
-    // Check if user is auto-confirmed (session exists immediately)
     if (data.session) {
-      toast({
-        title: "Account created!",
-        description: "Welcome to Fitness OS. Let's set up your profile.",
-      });
-      navigate("/onboarding");
+      toast({ title: "Welcome to FitHit", description: "Let's set up your profile." });
+      navigate("/onboarding", { replace: true });
       return { data, autoConfirmed: true };
     }
 
@@ -128,31 +181,24 @@ export function useAuth() {
       title: "Check your email",
       description: "We sent you a confirmation link to verify your account.",
     });
-
     return { data, autoConfirmed: false };
   };
 
   const signIn = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
       toast({
         variant: "destructive",
         title: "Sign in failed",
-        description: error.message,
+        description: friendlyAuthError(error.message),
       });
       return { error };
     }
 
-    toast({
-      title: "Welcome back!",
-      description: "You've successfully signed in.",
-    });
+    const userId = data.user.id;
 
-    // Apply any pending role (set by trainer/gym signup that needed email confirmation)
+    // Apply any pending role chosen during a trainer/gym signup.
     const pendingRole = localStorage.getItem("pending_role") as AppRole | null;
     const pendingRedirect = localStorage.getItem("pending_role_redirect");
     if (pendingRole === "trainer" || pendingRole === "gym_admin") {
@@ -160,26 +206,39 @@ export function useAuth() {
       localStorage.removeItem("pending_role");
       localStorage.removeItem("pending_role_redirect");
       if (!roleErr && pendingRedirect) {
-        navigate(pendingRedirect);
+        toast({ title: "Welcome back" });
+        navigate(pendingRedirect, { replace: true });
         return { data };
       }
     }
 
-    navigate("/dashboard");
+    const { data: prof } = await supabase
+      .from("profiles")
+      .select("onboarding_completed")
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    toast({ title: "Welcome back" });
+    navigate(prof?.onboarding_completed ? "/dashboard" : "/onboarding", { replace: true });
     return { data };
   };
 
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
-    if (error) {
+    if (error && !error.message.toLowerCase().includes("session")) {
       toast({
         variant: "destructive",
         title: "Sign out failed",
-        description: error.message,
+        description: friendlyAuthError(error.message),
       });
       return { error };
     }
-    navigate("/login");
+    setSession(null);
+    setUser(null);
+    setProfile(null);
+    setRoles([]);
+    loadedFor.current = null;
+    navigate("/login", { replace: true });
     return {};
   };
 
@@ -187,60 +246,55 @@ export function useAuth() {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/reset-password`,
     });
-
     if (error) {
       toast({
         variant: "destructive",
         title: "Password reset failed",
-        description: error.message,
+        description: friendlyAuthError(error.message),
       });
       return { error };
     }
-
-    toast({
-      title: "Check your email",
-      description: "We sent you a password reset link.",
-    });
-
+    toast({ title: "Check your email", description: "We sent you a password reset link." });
     return {};
   };
 
   const updatePassword = async (newPassword: string) => {
-    const { error } = await supabase.auth.updateUser({
-      password: newPassword,
-    });
-
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
     if (error) {
       toast({
         variant: "destructive",
         title: "Password update failed",
-        description: error.message,
+        description: friendlyAuthError(error.message),
       });
       return { error };
     }
-
-    toast({
-      title: "Password updated",
-      description: "Your password has been successfully updated.",
-    });
-
+    toast({ title: "Password updated" });
     return {};
   };
 
-  const hasRole = (role: AppRole): boolean => {
-    return authState.roles.includes(role);
-  };
-
-  const isAuthenticated = !!authState.session;
-
-  return {
-    ...authState,
-    isAuthenticated,
+  const value: AuthContextValue = {
+    user,
+    session,
+    profile,
+    roles,
+    isLoading,
+    isProfileLoading,
+    isAuthenticated: !!session,
+    profileError,
+    hasRole: (role: AppRole) => roles.includes(role),
+    refreshProfile,
     signUp,
     signIn,
     signOut,
     resetPassword,
     updatePassword,
-    hasRole,
   };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within an AuthProvider");
+  return ctx;
 }
